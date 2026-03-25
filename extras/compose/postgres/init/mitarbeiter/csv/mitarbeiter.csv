@@ -1,0 +1,8 @@
+id;version;nachname;email;position;gehalt;eintrittsdatum;homepage;geschlecht;familienstand;username;erzeugt;aktualisiert
+1;0;Admin;admin@firma.com;MANAGER;6000;2025-01-01;https://www.firma.com;MAENNLICH;VERHEIRATET;admin;2025-01-01 00:00:00;2025-01-01 00:00:00
+20;0;Müller;mueller@firma.de;ENTWICKLER;4500;2025-01-02;https://www.firma.de;WEIBLICH;LEDIG;mueller;2025-01-02 00:00:00;2025-01-02 00:00:00
+30;0;Schmidt;schmidt@firma.de;DESIGNER;4000;2025-01-03;https://www.firma.de;MAENNLICH;GESCHIEDEN;schmidt;2025-01-03 00:00:00;2025-01-03 00:00:00
+40;0;Meier;meier@firma.de;ENTWICKLER;4700;2025-01-04;https://www.firma.de;WEIBLICH;VERHEIRATET;meier;2025-01-04 00:00:00;2025-01-04 00:00:00
+50;0;Fischer;fischer@firma.de;TESTER;3800;2025-01-05;https://www.firma.de;DIVERS;LEDIG;fischer;2025-01-05 00:00:00;2025-01-05 00:00:00
+60;0;Weber;weber@firma.de;MANAGER;6500;2025-01-06;https://www.firma.de;MAENNLICH;VERWITWET;weber;2025-01-06 00:00:00;2025-01-06 00:00:00
+70;0;Wagner;wagner@firma.de;ENTWICKLER;4600;2025-01-07;https://www.firma.de;WEIBLICH;LEDIG;wagner;2025-01-07 00:00:00;2025-01-07 00:00:00

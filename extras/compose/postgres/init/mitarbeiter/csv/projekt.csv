@@ -1,0 +1,12 @@
+id;name;budget;mitarbeiter_id
+10;Website;10000;20
+11;Website;10000;40
+12;Website;10000;70
+13;App;20000;20
+14;App;20000;30
+15Backend;25000;40
+16;Backend;25000;70
+17;DesignSystem;15000;30
+18;Testing;8000;50
+19;ManagementTool;30000;60
+20;ManagementTool;30000;1

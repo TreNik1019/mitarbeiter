@@ -1,8 +1,7 @@
-id;name;standort;mitarbeiter_id
-1;Management;Berlin;1
-20;IT;Berlin;20
-30;Design;Hamburg;30
-40;IT;Berlin;40
-50;QA;München;50
-60;Management;Frankfurt;60
-70;IT;Berlin;70
+id;name;standort
+1;Management;Berlin
+20;IT;Berlin
+30;Design;Berlin
+40;Management;Frankfurt
+50;IT;Frankfurt
+60;Prüfstelle;Frankfurt

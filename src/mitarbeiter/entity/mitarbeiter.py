@@ -1,0 +1,129 @@
+# Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License ...
+
+"""Entity-Klasse für Mitarbeiterdaten."""
+
+from datetime import date, datetime
+from decimal import Decimal
+from typing import Any
+
+from sqlalchemy import Identity, func, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from mitarbeiter.entity.werksausweis import Werksausweis
+from mitarbeiter.entity.base import Base
+from mitarbeiter.entity.abteilung import Abteilung
+from mitarbeiter.entity.geschlecht import Geschlecht
+from mitarbeiter.entity.position import Position
+
+
+class Mitarbeiter(Base):
+    """Entity-Klasse für Mitarbeiterdaten."""
+
+    __tablename__ = "mitarbeiter"
+
+    # =========================
+    # Primitive Felder
+    # =========================
+
+    nachname: Mapped[str]
+    """Der Nachname."""
+
+    email: Mapped[str] = mapped_column(unique=True)
+    """Die eindeutige Emailadresse."""
+
+    position: Mapped[Position]
+    """Die Position im Unternehmen."""
+
+    gehalt: Mapped[Decimal]
+    """Das Gehalt."""
+
+    eintrittsdatum: Mapped[date]
+    """Das Eintrittsdatum."""
+
+    homepage: Mapped[str | None]
+    """Optionale Homepage."""
+
+    geschlecht: Mapped[Geschlecht | None]
+    """Optionales Geschlecht."""
+
+    username: Mapped[str]
+    """Login-Username."""
+
+    # =========================
+    # ID
+    # =========================
+
+    id: Mapped[int] = mapped_column(
+        Identity(start=1000),
+        primary_key=True,
+    )
+    """Primärschlüssel."""
+
+    # =========================
+    # Versioning
+    # =========================
+
+    version: Mapped[int] = mapped_column(
+        nullable=False,
+        default=0,
+    )
+    """Version für Optimistic Locking."""
+
+    # =========================
+    # Timestamp
+    # =========================
+
+    erzeugt: Mapped[datetime | None] = mapped_column(
+        insert_default=func.now(),
+        default=None,
+    )
+
+    aktualisiert: Mapped[datetime | None] = mapped_column(
+        insert_default=func.now(),
+        onupdate=func.now(),
+        default=None,
+    )
+
+    # =========================
+    # Beziehung zu Abteilung (n:1)
+    # =========================
+
+    abteilung_id: Mapped[int] = mapped_column(
+        ForeignKey("abteilung.id"),
+    )
+
+    abteilung: Mapped[Abteilung] = relationship()
+
+    werksausweis: Mapped[Werksausweis] = relationship(
+    back_populates="mitarbeiter",
+    cascade="all, delete",
+)
+
+    # =========================
+    # Methoden
+    # =========================
+
+    def __eq__(self, other: Any) -> bool:
+        """Vergleich auf Gleicheit, ohne Joins zu verursachen."""
+        # Vergleich der Referenzen: id(self) == id(other)
+        if self is other:
+            return True
+        if not isinstance(other, type(self)):
+            return False
+        return self.id is not None and self.id == other.id
+
+    def __hash__(self) -> int:
+        """Hash-Funktion anhand der ID, ohne Joins zu verursachen."""
+        return hash(self.id) if self.id is not None else hash(type(self))
+
+    def __repr__(self) -> str:
+        """Ausgabe eines Mitarbeiters als String, ohne Joins zu verursachen."""
+        return (
+            f"Mitarbeiter(id={self.id}, version={self.version}, "
+            f"nachname={self.nachname}, email={self.email}, "
+            f"position={self.position}, gehalt={self.gehalt}, "
+            f"eintrittsdatum={self.eintrittsdatum})"
+        )

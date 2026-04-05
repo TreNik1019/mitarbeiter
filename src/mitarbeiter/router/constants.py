@@ -13,21 +13,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-"""CLI für das Projekt, damit das Modul als Python-Skript ausgeführt werden kann.
+"""PatientGetRouter."""
 
-Der Aufruf `python -m mitarbeiter` ist dadurch möglich, falls folgende Voraussetzungen
-erfüllt sind:
-- Die virtuelle Umgebung für _venv_ ist aktiviert
-- `sys.path` enthält das Verzeichnis `src` (ggf. die Umgebungsvariable `PYTHONPATH` auf
-  `src` setzen)
-Diese Möglichkeit sollte in einem Docker-Image genutzt werden, so dass der Package
-Manager _uv_ zur Laufzeit nicht benötigt wird und deshalb das Image klein gehalten
-werden kann.
-"""
+from typing import Final
 
-from mitarbeiter.asgi_server import run
+__all__ = [
+    "ETAG",
+    "IF_MATCH",
+    "IF_MATCH_MIN_LEN",
+    "IF_NONE_MATCH",
+    "IF_NONE_MATCH_MIN_LEN",
+]
 
-__all__ = ["run"]
-
-if __name__ == "__main__":
-    run()
+ETAG: Final = "ETag"
+IF_MATCH: Final = "if-match"
+IF_MATCH_MIN_LEN: Final = 3
+IF_NONE_MATCH: Final = "if-none-match"
+IF_NONE_MATCH_MIN_LEN: Final = 3

@@ -9,14 +9,14 @@ from datetime import date, datetime
 from decimal import Decimal
 from typing import Any
 
-from sqlalchemy import Identity, func, ForeignKey
+from sqlalchemy import ForeignKey, Identity, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from mitarbeiter.entity.werksausweis import Werksausweis
-from mitarbeiter.entity.base import Base
 from mitarbeiter.entity.abteilung import Abteilung
+from mitarbeiter.entity.base import Base
 from mitarbeiter.entity.geschlecht import Geschlecht
 from mitarbeiter.entity.position import Position
+from mitarbeiter.entity.werksausweis import Werksausweis
 
 
 class Mitarbeiter(Base):

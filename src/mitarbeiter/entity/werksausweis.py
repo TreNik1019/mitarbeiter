@@ -10,9 +10,9 @@ from datetime import date
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from mitarbeiter.entity.ausweisstatus import Ausweisstatus
 from mitarbeiter.entity.base import Base
 from mitarbeiter.entity.mitarbeiter import Mitarbeiter
-from mitarbeiter.entity.ausweisstatus import Ausweisstatus
 
 
 class Werksausweis(Base):

@@ -6,7 +6,7 @@ from decimal import Decimal
 
 import strawberry
 
-from mitarbeiter.entity import Position, Geschlecht, Mitarbeiter
+from mitarbeiter.entity import Geschlecht, Mitarbeiter, Position
 
 __all__ = ["MitarbeiterDTO"]
 

@@ -25,7 +25,7 @@ class MitarbeiterRepository:
         mitarbeiter_id: int | None,
         session: Session
     ) -> Mitarbeiter | None:
-        """Suche mit der Mitarbeiter-ID."""
+        """Find a mitarbeiter by ID."""
         logger.debug("mitarbeiter_id={}", mitarbeiter_id)  # NOSONAR
 
         if mitarbeiter_id is None:
@@ -47,14 +47,21 @@ class MitarbeiterRepository:
         pageable: Pageable,
         session: Session,
     ) -> Slice[Mitarbeiter]:
-        """Suche mit Suchparameter."""
+        """Suche mit Suchparametern."""
         log_str: Final = "{}"
         logger.debug(log_str, suchparameter)
         if not suchparameter:
             return self._find_all(pageable=pageable, session=session)
 
-        # Iteration ueber die Schluessel des Dictionaries mit den Suchparameter
         for key, value in suchparameter.items():
+            if key == "email":
+                mitarbeiter = self._find_by_email(email=value, session=session)
+                logger.debug(log_str, mitarbeiter)
+                return (
+                    Slice(content=(mitarbeiter,), total_elements=1)
+                    if mitarbeiter is not None
+                    else Slice(content=(), total_elements=0)
+                )
             if key == "nachname":
                 mitarbeiter = self._find_by_nachname(
                     teil=value, pageable=pageable, session=session
@@ -66,7 +73,6 @@ class MitarbeiterRepository:
     def _find_all(self, pageable: Pageable, session: Session) -> Slice[Mitarbeiter]:
         logger.debug("aufgerufen")
         offset = pageable.number * pageable.size
-        # https://docs.sqlalchemy.org/en/20/orm/session_basics.html#querying
         statement: Final = (
             (
                 select(Mitarbeiter)
@@ -81,7 +87,7 @@ class MitarbeiterRepository:
         anzahl: Final = self._count_all_rows(session)
         mitarbeiter_slice: Final = Slice(
             content=tuple(mitarbeiter),
-            total_elements=anzahl
+            total_elements=anzahl,
         )
         logger.debug("mitarbeiter_slice={}", mitarbeiter_slice)
         return mitarbeiter_slice
@@ -91,6 +97,18 @@ class MitarbeiterRepository:
         count: Final = session.execute(statement).scalar()
         return count if count is not None else 0
 
+    def _find_by_email(self, email: str, session: Session) -> Mitarbeiter | None:
+        """Einen Mitarbeiter anhand der Emailadresse suchen."""
+        logger.debug("email={}", email)  # NOSONAR
+        statement: Final = (
+            select(Mitarbeiter)
+            .options(joinedload(Mitarbeiter.werksausweis))
+            .where(Mitarbeiter.email == email)
+        )
+        mitarbeiter: Final = session.scalar(statement)
+        logger.debug("{}", mitarbeiter)
+        return mitarbeiter
+
     def _find_by_nachname(
         self,
         teil: str,
@@ -99,12 +117,11 @@ class MitarbeiterRepository:
     ) -> Slice[Mitarbeiter]:
         logger.debug("teil={}", teil)
         offset = pageable.number * pageable.size
-        # https://docs.sqlalchemy.org/en/20/orm/session_basics.html#querying
         statement: Final = (
             (
                 select(Mitarbeiter)
                 .options(joinedload(Mitarbeiter.werksausweis))
-                .filter(Mitarbeiter.nachname.ilike(f"%{teil}%"))
+                .where(Mitarbeiter.nachname.ilike(f"%{teil}%"))
                 .limit(pageable.size)
                 .offset(offset)
             )
@@ -112,14 +129,14 @@ class MitarbeiterRepository:
             else (
                 select(Mitarbeiter)
                 .options(joinedload(Mitarbeiter.werksausweis))
-                .filter(Mitarbeiter.nachname.ilike(f"%{teil}%"))
+                .where(Mitarbeiter.nachname.ilike(f"%{teil}%"))
             )
         )
         mitarbeiter: Final = session.scalars(statement).all()
         anzahl: Final = self._count_rows_nachname(teil, session)
         mitarbeiter_slice: Final = Slice(
             content=tuple(mitarbeiter),
-            total_elements=anzahl
+            total_elements=anzahl,
         )
         logger.debug("{}", mitarbeiter_slice)
         return mitarbeiter_slice
@@ -128,7 +145,16 @@ class MitarbeiterRepository:
         statement: Final = (
             select(func.count())
             .select_from(Mitarbeiter)
-            .filter(Mitarbeiter.nachname.ilike(f"%{teil}%"))
+            .where(Mitarbeiter.nachname.ilike(f"%{teil}%"))
         )
         count: Final = session.execute(statement).scalar()
         return count if count is not None else 0
+
+    def exists_email(self, email: str, session: Session) -> bool:
+        """Abfrage, ob es die Emailadresse bereits gibt."""
+        logger.debug("email={}", email)
+
+        statement: Final = select(func.count()).where(Mitarbeiter.email == email)
+        anzahl: Final = session.scalar(statement)
+        logger.debug("anzahl={}", anzahl)
+        return anzahl is not None and anzahl > 0

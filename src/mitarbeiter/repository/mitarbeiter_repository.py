@@ -3,7 +3,7 @@
 # "list" ist eine mutable "Sequence"
 # https://docs.python.org/3/library/stdtypes.html#lists
 # https://docs.python.org/3/library/stdtypes.html#typesseq
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Final
 
 from loguru import logger
@@ -158,3 +158,17 @@ class MitarbeiterRepository:
         anzahl: Final = session.scalar(statement)
         logger.debug("anzahl={}", anzahl)
         return anzahl is not None and anzahl > 0
+
+    def find_nachnamen(self, teil: str, session: Session) -> Sequence[str]:
+        """Suche Nachnamen zu einem Teilstring."""
+        logger.debug("teil={}", teil)
+
+        statement: Final = (
+            select(Mitarbeiter.nachname)
+            .filter(Mitarbeiter.nachname.ilike(f"%{teil}%"))
+            .distinct()
+        )
+        nachnamen: Final = (session.scalars(statement)).all()
+
+        logger.debug("nachnamen={}", nachnamen)
+        return nachnamen

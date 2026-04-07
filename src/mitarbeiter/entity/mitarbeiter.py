@@ -7,7 +7,7 @@
 
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Any
+from typing import Any, Self
 
 from sqlalchemy import ForeignKey, Identity, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -105,6 +105,16 @@ class Mitarbeiter(Base):
     # =========================
     # Methoden
     # =========================
+    def set(self, mitarbeiter: Self) -> None:
+        """Primitive Attributwerte überschreiben, z.B. vor DB-Update.
+
+        :param patient: Mitarbeiter-Objekt mit den aktuellen Daten
+        """
+        self.nachname = mitarbeiter.nachname
+        self.email = mitarbeiter.email
+        self.position = mitarbeiter.position
+        self.gehalt = mitarbeiter.gehalt
+        self.eintrittsdatum = mitarbeiter.eintrittsdatum
 
     def __eq__(self, other: Any) -> bool:
         """Vergleich auf Gleicheit, ohne Joins zu verursachen."""

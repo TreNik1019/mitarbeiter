@@ -172,3 +172,65 @@ class MitarbeiterRepository:
 
         logger.debug("nachnamen={}", nachnamen)
         return nachnamen
+
+    def exists_email_other_id(
+        self,
+        email: str,
+        mitarbeiter_id: int,
+        session: Session,
+    ) -> bool:
+        """Abfrage, ob es die Email bei einer anderen Mitarbeiter-id bereits gibt."""
+        logger.debug("email={}", email)
+
+        statement: Final = select(Mitarbeiter.id).where(Mitarbeiter.email == email)
+        id_db: Final = session.scalar(statement)
+        logger.debug("id_db={}", id_db)
+        return id_db is not None and id_db != mitarbeiter_id
+
+    def create(self, mitarbeiter: Mitarbeiter, session: Session) -> Mitarbeiter:
+        """Einen neuen Mitarbeiter anlegen."""
+        logger.debug(
+            "mitarbeiter={}, mitarbeiter.werksausweis={}, mitarbeiter.abteilung={}",
+            mitarbeiter,
+            mitarbeiter.werksausweis,
+            mitarbeiter.abteilung,
+        )
+        session.add(mitarbeiter)
+        session.flush(objects=[mitarbeiter])
+        logger.debug("mitarbeiter_id{}", mitarbeiter.id)
+        return mitarbeiter
+
+    def update(self, mitarbeiter: Mitarbeiter, session: Session) -> Mitarbeiter | None:
+        """Mitarbeiter aktualisieren."""
+        logger.debug("{}", mitarbeiter)
+
+        if (
+            mitarbeiter_db := self.find_by_id(mitarbeiter.id, session=session)
+        ) is None:
+            return None
+
+        logger.debug("{}", mitarbeiter_db)
+        return mitarbeiter_db
+
+    def delete_by_id(self, mitarbeiter_id: int, session: Session) -> None:
+        """Mitarbeiter anhand der ID löschen."""
+        logger.debug("mitarbeiter_id={}", mitarbeiter_id)
+        if (mitarbeiter := self.find_by_id(
+                mitarbeiter_id=mitarbeiter_id,
+                session=session)
+            ) is None:
+            return
+            session.delete(instance=mitarbeiter)
+            logger.debug("Mitarbeiter mit ID {} gelöscht", mitarbeiter_id)
+
+    def exists_username(self, username: str | None, session: Session) -> bool:
+        """Abfrage, ob es den Benutzernamen bereits gibt."""
+        logger.debug("username={}", username)
+
+        if username is None:
+            return False
+
+        statement: Final = select(Mitarbeiter.username).filter_by(username=username)
+        username_db: Final = session.scalar(statement)
+        logger.debug("username_db={}", username_db)
+        return username_db is not None

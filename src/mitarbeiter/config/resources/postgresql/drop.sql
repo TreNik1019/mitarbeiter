@@ -3,7 +3,7 @@
 -- =========================
 DROP INDEX IF EXISTS
     werksausweis_mitarbeiter_id_idx,
-    mitarbeiter_abteilung_id_idx,
+    mitarbeiter_auftrag_id_idx,
     mitarbeiter_nachname_idx;
 
 -- =========================
@@ -12,7 +12,7 @@ DROP INDEX IF EXISTS
 DROP TABLE IF EXISTS
     werksausweis,
     mitarbeiter,
-    abteilung;
+    auftrag;
 
 -- =========================
 -- ENUMs löschen

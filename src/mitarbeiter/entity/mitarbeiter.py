@@ -12,7 +12,7 @@ from typing import Any, Self
 from sqlalchemy import ForeignKey, Identity, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from mitarbeiter.entity.abteilung import Abteilung
+from mitarbeiter.entity.auftrag import Auftrag
 from mitarbeiter.entity.base import Base
 from mitarbeiter.entity.geschlecht import Geschlecht
 from mitarbeiter.entity.position import Position
@@ -88,14 +88,14 @@ class Mitarbeiter(Base):
     )
 
     # =========================
-    # Beziehung zu Abteilung (n:1)
+    # Beziehung zu Auftrag (n:1)
     # =========================
 
-    abteilung_id: Mapped[int] = mapped_column(
-        ForeignKey("abteilung.id"),
+    auftrag_id: Mapped[int] = mapped_column(
+        ForeignKey("auftrag.id"),
     )
 
-    abteilung: Mapped[Abteilung] = relationship()
+    auftrag: Mapped[Auftrag] = relationship()
 
     werksausweis: Mapped[Werksausweis] = relationship(
     back_populates="mitarbeiter",

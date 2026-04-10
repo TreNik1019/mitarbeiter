@@ -7,6 +7,8 @@ import strawberry
 
 from mitarbeiter.entity import Ausweisstatus, Werksausweis
 
+__all__ = ["WerksausweisDTO"]
+
 
 @dataclass(eq=False, slots=True, kw_only=True)
 @strawberry.type

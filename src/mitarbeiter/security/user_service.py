@@ -14,6 +14,7 @@ from mitarbeiter.security.user import User
 
 __all__ = ["UserService"]
 
+
 class UserService:
     """Schnittstelle für das Management der Benutzerdaten von Keycloak."""
 
@@ -29,7 +30,9 @@ class UserService:
             )
             logger.debug("client_id={} für 'python-client'", self.client_uuid)
             roles = self.keycloak_admin.get_client_roles(client_id=self.client_uuid)
-            roles_mitarbeiter = [role for role in roles if role["name"] == "mitarbeiter"]
+            roles_mitarbeiter = [
+                role for role in roles if role["name"] == "mitarbeiter"
+            ]
             self.rolle_mitarbeiter = roles_mitarbeiter[0]
             logger.debug("rolle_mitarbeiter={}", self.rolle_mitarbeiter)
         except KeycloakConnectionError:
@@ -38,17 +41,17 @@ class UserService:
             self.rolle_mitarbeiter = None
 
     def username_exists(self, username: str) -> bool:
-        """Existiert Benutzer bereits?"""
+        """Existiert Benutzer bereits?."""
         logger.debug("username={}", username)
 
         user_id: Final = self.keycloak_admin.get_user_id(username)
         logger.debug("user_id={}", user_id)
-        exist: Final = user_id is not None
+        exists: Final = user_id is not None
         logger.debug("exists={}", exists)
         return exists
 
     def email_exists(self, email: str) -> bool:
-        """Existiert Email bereits?"""
+        """Existiert Email bereits?."""
         logger.debug("email={}", email)
 
         users: Final = self.keycloak_admin.get_users(query={"email": email})
@@ -79,7 +82,7 @@ class UserService:
         )
         return user_id
 
-    def remove_all_users(self) -> None:         #noch anschauen!
+    def remove_all_users(self) -> None:         # noch anschauen!
         """Alle User außer 'admin' aus Keycloak entfernen."""
         # https://www.keycloak.org/docs-api/latest/rest-api/#_users:
         # GET /admin/realms/{realm}/users
@@ -94,7 +97,6 @@ class UserService:
 
     def find_user_by_username(self, username: str) -> User | None:
         """User anhannd Benutzernamen suchen."""
-
         kc_users: Final = self.keycloak_admin.get_users({"username": username})
         if not kc_users:
             return None

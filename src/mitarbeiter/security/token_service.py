@@ -15,12 +15,13 @@ from mitarbeiter.security.user import User
 
 __all__ = ["TokenService"]
 
+
 class TokenService:
-    """Tokenmanagement von Keycloak"""
+    """Tokenmanagement von Keycloak."""
 
     def __init__(self) -> None:
-        """Initialisierung"""
-        self.keycloak = KeycloakOpenID(**asdict[keycloak_config])
+        """Initialisierung."""
+        self.keycloak = KeycloakOpenID(**asdict(keycloak_config))
 
     def token(self, username: str | None, password: str | None) -> Mapping[str, str]:
         """Access und Refresh Token des Users werden ermittelt."""
@@ -53,26 +54,37 @@ class TokenService:
 
     def get_user_from_token(self, token: str) -> User:
         """Userdaten aus cod. Token extrahieren."""
-
         try:
             token_decoded: Final = self.keycloak.decode_token(token=token)
         except (JWException) as err:
             raise AuthorizationError from err
 
+        logger.debug("token_decoded={}", token_decoded)
+        username: Final[str] = token_decoded["preferred_username"]
+        email: Final[str] = token_decoded["email"]
+        nachname: Final[str] = token_decoded["name"]
+        vorname: Final[str] = token_decoded["given_name"]
+        roles = self.get_roles_from_token(token_decoded)
+
+        user: Final = User(
+            username=username,
+            email=email,
+            nachname=nachname,
+            vorname=vorname,
+            roles=roles
+        )
         logger.debug("user={}", user)
         return user
 
     def get_user_from_request(self, request: Request) -> User:
         """Userdaten aus cod. "Authorization"-String extrahieren."""
-
         bearer_token: Final = self._get_token_from_request(request)
         user: Final = self.get_user_from_token(token=bearer_token)
         logger.debug("user={}", user)
         return user
 
     def get_roles_from_token(self, token: str | Mapping[str, Any]) -> list[Role]:
-        """Rollen aus Access Token extrahieren"""
-
+        """Rollen aus Access Token extrahieren."""
         if isinstance(token, str):
             token_decoded = self.keycloak.decode_token(token=token)
         else:

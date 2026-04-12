@@ -58,6 +58,7 @@ class MitarbeiterWriteService:
             username=username,
             email=mitarbeiter.email,
             nachname=mitarbeiter.nachname,
+            vorname=mitarbeiter.nachname,
             password="p",  # noqa: S106 # NOSONAR
             roles=[],
         )

@@ -9,7 +9,7 @@ from datetime import date, datetime
 from decimal import Decimal
 from typing import Any, Self
 
-from sqlalchemy import ForeignKey, Identity, func
+from sqlalchemy import Identity, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from mitarbeiter.entity.auftrag import Auftrag
@@ -87,20 +87,18 @@ class Mitarbeiter(Base):
         default=None,
     )
 
-    # =========================
-    # Beziehung zu Auftrag (n:1)
-    # =========================
-
-    auftrag_id: Mapped[int] = mapped_column(
-        ForeignKey("auftrag.id"),
-    )
-
-    auftrag: Mapped[Auftrag] = relationship()
-
     werksausweis: Mapped[Werksausweis] = relationship(
     back_populates="mitarbeiter",
     cascade="all, delete",
 )
+
+    # =========================
+    # 1:n Beziehung (HINZUGEFÜGT)
+    # =========================
+
+    auftraege: Mapped[list[Auftrag]] = relationship(
+        back_populates="mitarbeiter"
+    )
 
     # =========================
     # Methoden

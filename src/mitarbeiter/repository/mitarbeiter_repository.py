@@ -190,10 +190,10 @@ class MitarbeiterRepository:
     def create(self, mitarbeiter: Mitarbeiter, session: Session) -> Mitarbeiter:
         """Einen neuen Mitarbeiter anlegen."""
         logger.debug(
-            "mitarbeiter={}, mitarbeiter.werksausweis={}, mitarbeiter.auftrag={}",
+            "mitarbeiter={}, mitarbeiter.werksausweis={}, mitarbeiter.auftraege={}",
             mitarbeiter,
             mitarbeiter.werksausweis,
-            mitarbeiter.auftrag,
+            mitarbeiter.auftraege,
         )
         session.add(mitarbeiter)
         session.flush(objects=[mitarbeiter])

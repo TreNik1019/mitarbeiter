@@ -37,10 +37,10 @@ class MitarbeiterWriteService:
         :raises UsernameExistsError, wenn Username schon existiert
         """
         logger.debug(
-            "mitarbeiter={}, werksausweis={}, auftrag={}",
+            "mitarbeiter={}, werksausweis={}, auftraege={}",
             mitarbeiter,
             mitarbeiter.werksausweis,
-            mitarbeiter.auftrag,
+            mitarbeiter.auftraege,
         )
 
         username: Final = mitarbeiter.username

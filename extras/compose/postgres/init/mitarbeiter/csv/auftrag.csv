@@ -1,7 +1,17 @@
-id;bezeichnung;auftragserteilung;dauer
-1;Management Projekt;2025-01-01;2025-12-31
-20;IT Systementwicklung;2025-01-02;2025-10-31
-30;Design Konzept;2025-01-03;2025-08-31
-40;Management Frankfurt;2025-01-04;2025-11-30
-50;IT Infrastruktur;2025-01-05;2025-09-30
-60;Qualitätssicherung;2025-01-06;2025-07-31
+id;bezeichnung;auftragserteilung;dauer;mitarbeiter_id
+1;Management Projekt;2025-01-01;2025-12-31;1
+20;IT Systementwicklung;2025-01-02;2025-10-31;20
+30;Design Konzept;2025-01-03;2025-08-31;30
+40;Management Frankfurt;2025-01-04;2025-11-30;40
+50;IT Infrastruktur;2025-01-05;2025-09-30;50
+60;Qualitätssicherung;2025-01-06;2025-07-31;60
+61;IT Systementwicklung Backend;2025-02-01;2025-10-31;20
+62;IT Systementwicklung Frontend;2025-03-01;2025-09-30;20
+63;Design Konzept UX;2025-02-10;2025-07-31;30
+64;Design Konzept UI Erweiterung;2025-03-15;2025-08-15;30
+65;Management Frankfurt Umsetzung;2025-03-01;2025-12-15;40
+66;Management Frankfurt Controlling;2025-04-01;2025-11-01;40
+67;IT Infrastruktur Cloud;2025-02-15;2025-10-31;50
+68;IT Infrastruktur Netzwerk;2025-03-20;2025-09-15;50
+69;Qualitätssicherung Testphase A;2025-02-01;2025-07-31;60
+70;Qualitätssicherung Testphase B;2025-03-01;2025-08-15;60

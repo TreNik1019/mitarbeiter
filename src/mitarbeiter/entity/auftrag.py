@@ -2,9 +2,11 @@
 
 from datetime import date
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from mitarbeiter.entity.base import Base
+from mitarbeiter.entity.mitarbeiter import Mitarbeiter
 
 
 class Auftrag(Base):
@@ -25,6 +27,14 @@ class Auftrag(Base):
 
     dauer: Mapped[date]
     """Die Dauer des Auftrags."""
+
+    mitarbeiter_id: Mapped[int] = mapped_column(
+        ForeignKey("mitarbeiter.id"),
+    )
+
+    mitarbeiter: Mapped[Mitarbeiter] = relationship(
+        back_populates="auftraege"
+    )
 
     def __repr__(self) -> str:
         """Ausgabe des Auftrags als String."""

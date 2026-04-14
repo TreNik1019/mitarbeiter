@@ -63,6 +63,21 @@ class Mitarbeiter(Base):
     """Primärschlüssel."""
 
     # =========================
+    # Relations
+    # =========================
+
+    auftraege: Mapped[list[Auftrag]] = relationship(
+        back_populates="mitarbeiter",
+        cascade="save-update, delete",
+    )
+
+    werksausweis: Mapped[Werksausweis] = relationship(
+        back_populates="mitarbeiter",
+        innerjoin=True,
+        cascade="save-update, delete",
+    )
+
+    # =========================
     # Versioning
     # =========================
 
@@ -85,19 +100,6 @@ class Mitarbeiter(Base):
         insert_default=func.now(),
         onupdate=func.now(),
         default=None,
-    )
-
-    werksausweis: Mapped[Werksausweis] = relationship(
-    back_populates="mitarbeiter",
-    cascade="all, delete",
-)
-
-    # =========================
-    # 1:n Beziehung (HINZUGEFÜGT)
-    # =========================
-
-    auftraege: Mapped[list[Auftrag]] = relationship(
-        back_populates="mitarbeiter"
     )
 
     # =========================

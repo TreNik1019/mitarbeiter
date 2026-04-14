@@ -2,11 +2,10 @@
 
 from datetime import date
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Identity
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from mitarbeiter.entity.base import Base
-from mitarbeiter.entity.mitarbeiter import Mitarbeiter
 
 
 class Auftrag(Base):
@@ -15,6 +14,7 @@ class Auftrag(Base):
     __tablename__ = "auftrag"
 
     id: Mapped[int] = mapped_column(
+        Identity(start=1000),
         primary_key=True,
     )
     """Die ID des Auftrags."""
@@ -32,7 +32,7 @@ class Auftrag(Base):
         ForeignKey("mitarbeiter.id"),
     )
 
-    mitarbeiter: Mapped[Mitarbeiter] = relationship(
+    mitarbeiter: Mapped[Mitarbeiter] = relationship(    # noqa: F821 # ty: ignore[unresolved-reference] # pyright: ignore[reportUndefinedVariable ]
         back_populates="auftraege"
     )
 

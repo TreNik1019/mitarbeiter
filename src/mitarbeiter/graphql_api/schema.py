@@ -157,7 +157,7 @@ def get_context(request: Request) -> Context:
 
 
 graphql_router: Final = GraphQLRouter[Context](
-    schema=schema,
-    get_context=get_context,
+    schema,
+    context_getter=get_context,
     graphql_ide=graphql_ide
 )

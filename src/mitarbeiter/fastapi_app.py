@@ -1,18 +1,3 @@
-# Copyright (C) 2023 - present Juergen Zimmermann, Hochschule Karlsruhe
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 """MainApp."""
 
 from contextlib import asynccontextmanager
@@ -62,10 +47,8 @@ if TYPE_CHECKING:
     from collections.abc import AsyncGenerator, Awaitable, Callable
 
 __all__ = [
-    "authorization_error_handler",
     "email_exists_error_handler",
     "forbidden_error_handler",
-    "login_error_handler",
     "not_found_error_handler",
     "username_exists_error_handler",
     "version_outdated_error_handler",
@@ -78,8 +61,6 @@ TEXT_PLAIN: Final = "text/plain"
 # --------------------------------------------------------------------------------------
 # S t a r t u p   u n d   S h u t d o w n
 # --------------------------------------------------------------------------------------
-# https://fastapi.tiangolo.com/advanced/events
-# pylint: disable=redefined-outer-name
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None]:  # noqa: RUF029
     """DB und Keycloak neu laden, falls im dev-Modus, sowie Banner in der Konsole."""
@@ -96,7 +77,6 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:  # noqa: RUF029
 
 app: Final = FastAPI(lifespan=lifespan)
 
-# FastAPI-App fuer Metriken fuer Prometheus instrumentieren: Endpunkt /metrics
 Instrumentator().instrument(app).expose(app)
 
 app.add_middleware(GZipMiddleware, minimum_size=500)  # ty:ignore[invalid-argument-type]
@@ -147,19 +127,12 @@ app.include_router(graphql_router, prefix="/graphql")
 # --------------------------------------------------------------------------------------
 # S e c u r i t y
 # --------------------------------------------------------------------------------------
-# https://fastapi.tiangolo.com/tutorial/middleware
 @app.middleware("http")
 async def add_security_headers(
     request: Request,
     call_next: Callable[[Any], Awaitable[Response]],
 ) -> Response:
-    """Header-Daten beim Response für IT-Sicherheit setzen.
-
-    :param request: Injiziertes Request-Objekt, das zunächst fertig verarbeitet wird
-    :param call_next: nächste aufzurufende Middleware
-    :return: Response-Objekt mit zusätzlichen Header-Daten
-    :rtype: Response
-    """
+    """Header-Daten beim Response für IT-Sicherheit setzen."""
     response: Final[Response] = await call_next(request)
     set_response_headers(response)
     return response
@@ -170,14 +143,10 @@ async def add_security_headers(
 # --------------------------------------------------------------------------------------
 @app.get("/favicon.ico")
 def favicon() -> FileResponse:
-    """facicon.ico ermitteln.
-
-    :return: Response-Objekt mit favicon.ico
-    :rtype: FileResponse
-    """
+    """facicon.ico ermitteln."""
     src_path: Final = Path("src")
     file_name: Final = "favicon.ico"
-    favicon_path: Final = Path("mitarbeiter") / "static" / file_name
+    favicon_path: Final = Path("patient") / "static" / file_name
     file_path: Final = src_path / favicon_path if src_path.is_dir() else favicon_path
     logger.debug("file_path={}", file_path)
     return FileResponse(
@@ -191,23 +160,13 @@ def favicon() -> FileResponse:
 # --------------------------------------------------------------------------------------
 @app.exception_handler(NotFoundError)
 def not_found_error_handler(_request: Request, _err: NotFoundError) -> Response:
-    """Errorhandler für NotFoundError.
-
-    :param _err: NotFoundError aus der Geschäftslogik
-    :return: Response mit Statuscode 404
-    :rtype: Response
-    """
+    """Errorhandler für NotFoundError."""
     return create_problem_details(status_code=status.HTTP_404_NOT_FOUND)
 
 
 @app.exception_handler(ForbiddenError)
 def forbidden_error_handler(_request: Request, _err: ForbiddenError) -> Response:
-    """Errorhandler für ForbiddenError.
-
-    :param _err: ForbiddenError vom Überprüfen der erforderlichen Rollen
-    :return: Response mit Statuscode 403
-    :rtype: Response
-    """
+    """Errorhandler für ForbiddenError."""
     return create_problem_details(status_code=status.HTTP_403_FORBIDDEN)
 
 
@@ -216,25 +175,14 @@ def authorization_error_handler(
     _request: Request,
     _err: AuthorizationError,
 ) -> Response:
-    """Errorhandler für AuthorizationError.
-
-    :param _err: AuthorizationError vom Extrahieren der Benutzerkennung aus dem
-        Authorization-Header
-    :return: Response mit Statuscode 401
-    :rtype: Response
-    """
+    """Errorhandler für AuthorizationError."""
     return create_problem_details(status_code=status.HTTP_401_UNAUTHORIZED)
 
 
 @app.exception_handler(LoginError)
 # pylint: disable-next=invalid-name
 def login_error_handler(_request: Request, err: LoginError) -> Response:
-    """Exception-Handler, wenn der Benutzername oder das Passwort fehlerhaft ist.
-
-    :param _exc: LoginError
-    :return: Response-Objekt mit Statuscode 401
-    :rtype: Response
-    """
+    """Exception-Handler, wenn der Benutzername oder das Passwort fehlerhaft ist."""
     return create_problem_details(
         status_code=status.HTTP_401_UNAUTHORIZED, detail=str(err)
     )
@@ -242,13 +190,7 @@ def login_error_handler(_request: Request, err: LoginError) -> Response:
 
 @app.exception_handler(EmailExistsError)
 def email_exists_error_handler(_request: Request, err: EmailExistsError) -> Response:
-    """Exception-Handling für EmailExistsError.
-
-    :param err: Exception, falls die Emailadresse des neuen oder zu ändernden
-        Mitarbeitern bereits existiert
-    :return: Response mit Statuscode 422
-    :rtype: Response
-    """
+    """Exception-Handling für EmailExistsError."""
     return create_problem_details(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail=str(err),
@@ -260,13 +202,7 @@ def username_exists_error_handler(
     _request: Request,
     err: UsernameExistsError,
 ) -> Response:
-    """Exception-Handling für UsernameExistsError.
-
-    :param err: Exception, falls der Username für den neuen Mitarbeitern bereits
-        existiert
-    :return: Response mit Statuscode 422
-    :rtype: Response
-    """
+    """Exception-Handling für UsernameExistsError."""
     return create_problem_details(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail=str(err),
@@ -278,12 +214,7 @@ def version_outdated_error_handler(
     _request: Request,
     err: VersionOutdatedError,
 ) -> Response:
-    """Exception-Handling für VersionOutdatedError.
-
-    :param _err: Exception, falls die Versionsnummer zum Aktualisieren veraltet ist
-    :return: Response mit Statuscode 412
-    :rtype: Response
-    """
+    """Exception-Handling für VersionOutdatedError."""
     return create_problem_details(
         status_code=status.HTTP_412_PRECONDITION_FAILED,
         detail=str(err),

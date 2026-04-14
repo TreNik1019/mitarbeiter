@@ -7,12 +7,11 @@
 
 from datetime import date
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Identity
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from mitarbeiter.entity.ausweisstatus import Ausweisstatus
 from mitarbeiter.entity.base import Base
-from mitarbeiter.entity.mitarbeiter import Mitarbeiter
 
 
 class Werksausweis(Base):
@@ -33,11 +32,8 @@ class Werksausweis(Base):
     guthaben: Mapped[float]
     """Das Guthaben auf dem Ausweis."""
 
-    # =========================
-    # ID
-    # =========================
-
     id: Mapped[int] = mapped_column(
+        Identity(start=1000),
         primary_key=True,
     )
     """Primärschlüssel."""
@@ -47,10 +43,10 @@ class Werksausweis(Base):
     # =========================
 
     mitarbeiter_id: Mapped[int] = mapped_column(
-        ForeignKey("mitarbeiter.id", ondelete="CASCADE"),
+        ForeignKey("mitarbeiter.id"),
     )
 
-    mitarbeiter: Mapped[Mitarbeiter] = relationship(
+    mitarbeiter: Mapped[Mitarbeiter] = relationship(  # noqa: F821 # ty: ignore[unresolved-reference] # pyright: ignore[reportUndefinedVariable]
         back_populates="werksausweis",
     )
 

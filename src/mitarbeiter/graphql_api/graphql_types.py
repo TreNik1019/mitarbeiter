@@ -76,7 +76,7 @@ class MitarbeiterInput:
     """Auftraege des Mitarbeiters."""
 
 
-@strawberry.type
+@strawberry.input
 class Suchparameter:
     """Input-Objekt für Suchparameter."""
 

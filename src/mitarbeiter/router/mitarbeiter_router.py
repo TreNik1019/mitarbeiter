@@ -130,5 +130,5 @@ def _mitarbeiter_to_dict(mitarbeiter: MitarbeiterDTO) -> dict[str, Any]:
     # https://docs.python.org/3/library/dataclasses.html
     mitarbeiter_dict: Final = asdict(obj=mitarbeiter)
     mitarbeiter_dict.pop("version")
-    mitarbeiter_dict.update({"geburtsdatum": mitarbeiter.eintrittsdatum.isoformat()})
+    mitarbeiter_dict.update({"eintrittsdatum": mitarbeiter.eintrittsdatum.isoformat()})
     return mitarbeiter_dict

@@ -19,5 +19,5 @@ DROP TABLE IF EXISTS
 -- =========================
 DROP TYPE IF EXISTS
     ausweisstatus,
-    position,
+    "position",
     geschlecht;

@@ -28,4 +28,4 @@ CREATE DATABASE mitarbeiter;
 GRANT ALL ON DATABASE mitarbeiter TO mitarbeiter;
 
 -- https://www.postgresql.org/docs/current/sql-createtablespace.html
-CREATE TABLESPACE patientspace OWNER mitarbeiter LOCATION '/tablespace/mitarbeiter';
+CREATE TABLESPACE mitarbeiterspace OWNER mitarbeiter LOCATION '/tablespace/mitarbeiter';

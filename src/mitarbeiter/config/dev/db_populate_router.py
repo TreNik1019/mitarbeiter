@@ -21,7 +21,10 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse
 from loguru import logger
 
-from mitarbeiter.config.dev.db_populate import DbPopulateService, get_db_populate_service
+from mitarbeiter.config.dev.db_populate import (
+    DbPopulateService,
+    get_db_populate_service,
+)
 from mitarbeiter.security import Role, RolesRequired, User
 
 __all__ = ["router"]

@@ -45,9 +45,7 @@ class Query:
 
     @strawberry.field
     def mitarbeiter(
-        self,
-        mitarbeiter_id: strawberry.ID,
-        info: Info
+        self, mitarbeiter_id: strawberry.ID, info: Info
     ) -> MitarbeiterDTO | None:
         """Mitarbeiter suchen."""
         logger.debug("mitarbeiter_id={}", mitarbeiter_id)
@@ -59,8 +57,7 @@ class Query:
 
         try:
             mitarbeiter_dto: Final = _service.find_by_id(
-                mitarbeiter_id=int(mitarbeiter_id),
-                current_user=current_user
+                mitarbeiter_id=int(mitarbeiter_id), current_user=current_user
             )
         except NotFoundError:
             return None
@@ -69,9 +66,7 @@ class Query:
 
     @strawberry.field
     def mmitarbeiter(
-        self,
-        suchparameter: Suchparameter,
-        info: Info
+        self, suchparameter: Suchparameter, info: Info
     ) -> Sequence[MitarbeiterDTO]:
         """Mitarbeiter anhand von Suchparametern suchen."""
         logger.debug("suchparameter={}", suchparameter)
@@ -92,8 +87,7 @@ class Query:
         pageable: Final = Pageable.create(size=str(0))
         try:
             mitarbeiter_dto: Final = _service.find(
-                suchparameter=suchparameter_filtered,
-                pageable=pageable
+                suchparameter=suchparameter_filtered, pageable=pageable
             )
         except NotFoundError:
             return []
@@ -106,10 +100,7 @@ class Mutation:
     """Mutationen, um Mitarbeiterdaten anzulegen, zu ändern oder zu löschen."""
 
     @strawberry.mutation
-    def create(
-        self,
-        mitarbeiter_input: MitarbeiterInput
-    ) -> CreatePayload:
+    def create(self, mitarbeiter_input: MitarbeiterInput) -> CreatePayload:
         """Einen neuen Mitarbeiter anlegen."""
         logger.debug("mitarbeiter_input={}", mitarbeiter_input)
 
@@ -117,14 +108,15 @@ class Mutation:
         m_dict["eintrittsdatum"] = mitarbeiter_input.eintrittsdatum.isoformat()
         if mitarbeiter_input.werksausweis:
             m_dict["werksausweis"] = mitarbeiter_input.werksausweis.__dict__.copy()
-            m_dict["werksausweis"]["ausstellungsdatum"] = \
+            m_dict["werksausweis"]["ausstellungsdatum"] = (
                 mitarbeiter_input.werksausweis.ausstellungsdatum.isoformat()
+            )
         if mitarbeiter_input.auftraege:
             m_dict["auftraege"] = [
                 {
                     **a.__dict__.copy(),
                     "auftragserteilung": a.auftragserteilung.isoformat(),
-                    "dauer": a.dauer.isoformat()
+                    "dauer": a.dauer.isoformat(),
                 }
                 for a in mitarbeiter_input.auftraege
             ]
@@ -140,13 +132,10 @@ class Mutation:
         return payload
 
     @strawberry.mutation
-    def login(self, username: str, password: str) -> LoginResult:   # NOQUA: ARG001
+    def login(self, username: str, password: str) -> LoginResult:  # NOQUA: ARG001
         """Token zu Benutzername und Passwort ermitteln."""
         logger.debug("username={}, password={}", username, password)
-        token_mapping = _token_service.token(
-            username=username,
-            password=password
-        )
+        token_mapping = _token_service.token(username=username, password=password)
 
         token = token_mapping["access_token"]
         current_user = _token_service.get_user_from_token(token)
@@ -166,7 +155,5 @@ def get_context(request: Request) -> Context:
 
 
 graphql_router: Final = GraphQLRouter[Context](
-    schema,
-    context_getter=get_context,
-    graphql_ide=graphql_ide
+    schema, context_getter=get_context, graphql_ide=graphql_ide
 )

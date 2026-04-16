@@ -1,4 +1,5 @@
 """Ausschnitt an gefundenen Daten."""
+
 from dataclasses import dataclass
 from typing import TypeVar
 

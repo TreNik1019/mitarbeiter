@@ -36,7 +36,7 @@ CREATE INDEX IF NOT EXISTS mitarbeiter_nachname_idx
 -- Auftrag
 -- =========================
 CREATE TABLE IF NOT EXISTS auftrag (
-    id                INTEGER PRIMARY KEY,
+    id                INTEGER GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY,
     bezeichnung       TEXT NOT NULL,
     auftragserteilung DATE NOT NULL,
     dauer             DATE NOT NULL,
@@ -49,7 +49,7 @@ CREATE INDEX IF NOT EXISTS auftrag_mitarbeiter_id_idx
 -- Werksausweis
 -- =========================
 CREATE TABLE IF NOT EXISTS werksausweis (
-    id                  INTEGER PRIMARY KEY,
+    id                  INTEGER GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY,
     status              ausweisstatus NOT NULL,
     ausstellungsdatum   DATE NOT NULL,
     guthaben            NUMERIC(10,2) NOT NULL CHECK (guthaben >= 0),

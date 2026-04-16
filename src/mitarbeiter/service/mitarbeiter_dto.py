@@ -7,6 +7,7 @@ from decimal import Decimal
 import strawberry
 
 from mitarbeiter.entity import Geschlecht, Mitarbeiter, Position
+from mitarbeiter.service.werksausweis_dto import WerksausweisDTO
 
 __all__ = ["MitarbeiterDTO"]
 
@@ -26,6 +27,7 @@ class MitarbeiterDTO:
     homepage: str | None
     geschlecht: Geschlecht | None
     username: str
+    werksausweis: WerksausweisDTO
 
     def __init__(self, mitarbeiter: Mitarbeiter):
         """DTO aus dem Mitarbeiter erstellt."""
@@ -39,3 +41,4 @@ class MitarbeiterDTO:
         self.homepage: str | None = mitarbeiter.homepage
         self.geschlecht: Geschlecht | None = mitarbeiter.geschlecht
         self.username: str = mitarbeiter.username
+        self.werksausweis: WerksausweisDTO = WerksausweisDTO(mitarbeiter.werksausweis)

@@ -32,7 +32,7 @@ class Auftrag(Base):
         ForeignKey("mitarbeiter.id"),
     )
 
-    mitarbeiter: Mapped[Mitarbeiter] = relationship(    # noqa: F821 # ty: ignore[unresolved-reference] # pyright: ignore[reportUndefinedVariable ]
+    mitarbeiter: Mapped[Mitarbeiter] = relationship(  # noqa: F821 # ty: ignore[unresolved-reference] # pyright: ignore[reportUndefinedVariable ]
         back_populates="auftraege"
     )
 

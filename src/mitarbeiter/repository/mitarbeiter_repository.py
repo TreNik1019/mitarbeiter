@@ -21,9 +21,7 @@ class MitarbeiterRepository:
     """Repository-Klasse mit CRUD-Methoden für die Entity-Klasse Mitarbeiter."""
 
     def find_by_id(
-        self,
-        mitarbeiter_id: int | None,
-        session: Session
+        self, mitarbeiter_id: int | None, session: Session
     ) -> Mitarbeiter | None:
         """Find a mitarbeiter by ID."""
         logger.debug("mitarbeiter_id={}", mitarbeiter_id)  # NOSONAR
@@ -204,9 +202,7 @@ class MitarbeiterRepository:
         """Mitarbeiter aktualisieren."""
         logger.debug("{}", mitarbeiter)
 
-        if (
-            mitarbeiter_db := self.find_by_id(mitarbeiter.id, session=session)
-        ) is None:
+        if (mitarbeiter_db := self.find_by_id(mitarbeiter.id, session=session)) is None:
             return None
 
         logger.debug("{}", mitarbeiter_db)
@@ -215,10 +211,11 @@ class MitarbeiterRepository:
     def delete_by_id(self, mitarbeiter_id: int, session: Session) -> None:
         """Mitarbeiter anhand der ID löschen."""
         logger.debug("mitarbeiter_id={}", mitarbeiter_id)
-        if (mitarbeiter := self.find_by_id(
-                mitarbeiter_id=mitarbeiter_id,
-                session=session)
-            ) is None:
+        if (
+            mitarbeiter := self.find_by_id(
+                mitarbeiter_id=mitarbeiter_id, session=session
+            )
+        ) is None:
             return
             session.delete(instance=mitarbeiter)
             logger.debug("Mitarbeiter mit ID {} gelöscht", mitarbeiter_id)

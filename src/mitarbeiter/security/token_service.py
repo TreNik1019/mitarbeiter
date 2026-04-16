@@ -1,4 +1,5 @@
 """Anwendungskern für Benutzerdaten."""
+
 from collections.abc import Mapping
 from dataclasses import asdict
 from typing import Any, Final
@@ -56,7 +57,7 @@ class TokenService:
         """Userdaten aus cod. Token extrahieren."""
         try:
             token_decoded: Final = self.keycloak.decode_token(token=token)
-        except (JWException) as err:
+        except JWException as err:
             raise AuthorizationError from err
 
         logger.debug("token_decoded={}", token_decoded)
@@ -71,7 +72,7 @@ class TokenService:
             email=email,
             nachname=nachname,
             vorname=vorname,
-            roles=roles
+            roles=roles,
         )
         logger.debug("user={}", user)
         return user
@@ -91,7 +92,7 @@ class TokenService:
             token_decoded = token
         logger.debug("token_decoded={}", token_decoded)
 
-        roles: Final[str] = token_decoded["ressource_access"][self.keycloak.client_id][
+        roles: Final[str] = token_decoded["resource_access"][self.keycloak.client_id][
             "roles"
         ]
         roles_enum: Final = [Role[role.upper()] for role in roles]

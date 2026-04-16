@@ -75,6 +75,9 @@ class MitarbeiterInput:
     auftraege: list[AuftragInput]
     """Auftraege des Mitarbeiters."""
 
+    username: str
+    """Benutzername des Mitarbeiters."""
+
 
 @strawberry.input
 class Suchparameter:

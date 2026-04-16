@@ -1,4 +1,3 @@
-
 """Session Factory."""
 
 from typing import Final

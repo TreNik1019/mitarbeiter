@@ -18,21 +18,21 @@ token: str | None
 def test_post() -> None:
     # arrange
     neuer_mitarbeiter: Final = {
-        "nachname": "Nachnamerest",
+        "nachname": "Mustermann",
         "email": "testrest@rest.de",
-        "position": "TESTER",
-        "gehalt": 5000,
+        "position": "TE",
+        "gehalt": 5000.0,
         "eintrittsdatum": "2026-02-01",
         "homepage": "https://rest.de",
-        "geschlecht": "WEIBLICH",
+        "geschlecht": "W",
         "werksausweis": {
-            "status": "GESPERRT",
+            "status": "G",
             "ausstellungsdatum": "2026-02-01",
-            "guthaben": 15,
+            "guthaben": 15.0,
         },
-        "auftrag": [
+        "auftraege": [
             {
-                "bezeichnung": "Rest Projekt",
+                "bezeichnung": "Restprojekt",
                 "auftragserteilung": "2026-02-01",
                 "dauer": "2026-02-28",
             }
@@ -64,20 +64,20 @@ def test_post_invalid() -> None:
     # arrange
     neuer_mitarbeiter_invalid: Final = {
         "nachname": "falscher_nachname",
-        "email": "falsche_email@",
-        "position": "TESTER",
-        "gehalt": 5000,
+        "email": "falsche_email@com",
+        "position": "INVALID",
+        "gehalt": 5000.0,
         "eintrittsdatum": "2026-02-01",
-        "homepage": "https://rest.de",
-        "geschlecht": "WEIBLICH",
+        "homepage": "keine-url",
+        "geschlecht": "W",
         "werksausweis": {
-            "status": "GESCHLOSSEN",
+            "status": "X",
             "ausstellungsdatum": "2026-02-01",
-            "guthaben": 15,
+            "guthaben": 15.0,
         },
-        "auftrag": [
+        "auftraege": [
             {
-                "bezeichnung": "Rest Projekt",
+                "bezeichnung": "Restprojekt",
                 "auftragserteilung": "2026-02-01",
                 "dauer": "2026-02-28",
             }
@@ -112,19 +112,19 @@ def test_post_email_exists() -> None:
     neuer_mitarbeiter: Final = {
         "nachname": "Nachnamerest",
         "email": email_exists,
-        "position": "TESTER",
-        "gehalt": 5000,
+        "position": "TE",
+        "gehalt": 5000.0,
         "eintrittsdatum": "2026-02-01",
         "homepage": "https://rest.de",
-        "geschlecht": "WEIBLICH",
+        "geschlecht": "W",
         "werksausweis": {
-            "status": "GESCHLOSSEN",
+            "status": "G",
             "ausstellungsdatum": "2026-02-01",
-            "guthaben": 15,
+            "guthaben": 15.0,
         },
-        "auftrag": [
+        "auftraege": [
             {
-                "bezeichnung": "Rest Projekt",
+                "bezeichnung": "Restprojekt",
                 "auftragserteilung": "2026-02-01",
                 "dauer": "2026-02-28",
             }

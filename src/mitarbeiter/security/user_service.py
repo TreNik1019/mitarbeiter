@@ -82,7 +82,7 @@ class UserService:
         )
         return user_id
 
-    def remove_all_users(self) -> None:         # noch anschauen!
+    def remove_all_users(self) -> None:  # noch anschauen!
         """Alle User außer 'admin' aus Keycloak entfernen."""
         # https://www.keycloak.org/docs-api/latest/rest-api/#_users:
         # GET /admin/realms/{realm}/users

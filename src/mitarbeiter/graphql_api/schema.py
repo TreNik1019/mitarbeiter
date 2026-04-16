@@ -113,13 +113,23 @@ class Mutation:
         """Einen neuen Mitarbeiter anlegen."""
         logger.debug("mitarbeiter_input={}", mitarbeiter_input)
 
-        mitarbeiter_dict = mitarbeiter_input.__dict__
-        mitarbeiter_dict["werksausweis"] = mitarbeiter_input.werksausweis.__dict__
-        mitarbeiter_dict["Auftraege"] = [
-            auftrag.__dict__ for auftrag in mitarbeiter_input.auftraege
-        ]
+        m_dict = mitarbeiter_input.__dict__.copy()
+        m_dict["eintrittsdatum"] = mitarbeiter_input.eintrittsdatum.isoformat()
+        if mitarbeiter_input.werksausweis:
+            m_dict["werksausweis"] = mitarbeiter_input.werksausweis.__dict__.copy()
+            m_dict["werksausweis"]["ausstellungsdatum"] = \
+                mitarbeiter_input.werksausweis.ausstellungsdatum.isoformat()
+        if mitarbeiter_input.auftraege:
+            m_dict["auftraege"] = [
+                {
+                    **a.__dict__.copy(),
+                    "auftragserteilung": a.auftragserteilung.isoformat(),
+                    "dauer": a.dauer.isoformat()
+                }
+                for a in mitarbeiter_input.auftraege
+            ]
 
-        mitarbeiter_model: Final = MitarbeiterModel.model_validate(mitarbeiter_dict)
+        mitarbeiter_model: Final = MitarbeiterModel.model_validate(m_dict)
 
         mitarbeiter_dto: Final = _write_service.create(
             mitarbeiter=mitarbeiter_model.to_mitarbeiter()
@@ -129,20 +139,19 @@ class Mutation:
         logger.debug("{}", payload)
         return payload
 
+    @strawberry.mutation
+    def login(self, username: str, password: str) -> LoginResult:   # NOQUA: ARG001
+        """Token zu Benutzername und Passwort ermitteln."""
+        logger.debug("username={}, password={}", username, password)
+        token_mapping = _token_service.token(
+            username=username,
+            password=password
+        )
 
-@strawberry.mutation
-def login(self, username: str, password: str) -> LoginResult:   # noqa: ARG001
-    """Token zu Benutzername und Passwort ermitteln."""
-    logger.debug("username={}, password={}", username, password)
-    token_mapping = _token_service.token(
-        username=username,
-        password=password
-    )
-
-    token = token_mapping["access_token"]
-    current_user = _token_service.get_user_from_token(token)
-    roles: Final = [role.value for role in current_user.roles]
-    return LoginResult(token=token, expiresIn="1d", roles=roles)
+        token = token_mapping["access_token"]
+        current_user = _token_service.get_user_from_token(token)
+        roles: Final = [role.value for role in current_user.roles]
+        return LoginResult(token=token, expiresIn="1d", roles=roles)
 
 
 schema: Final = strawberry.Schema(query=Query, mutation=Mutation)

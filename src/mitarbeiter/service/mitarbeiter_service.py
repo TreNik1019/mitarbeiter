@@ -1,6 +1,5 @@
 """Geschäftslogik zum Lesen von Mitarbeiterdaten."""
 
-
 from collections.abc import Mapping, Sequence
 from typing import Final
 
@@ -29,10 +28,7 @@ class MitarbeiterService:
     def find_by_id(self, mitarbeiter_id: int, current_user: User) -> MitarbeiterDTO:
         """Suche mit Mitarbeiter-ID."""
         logger.debug(
-            "mitarbeiter_id={}",
-            "current_user={}",
-            mitarbeiter_id,
-            current_user
+            "mitarbeiter_id={}", "current_user={}", mitarbeiter_id, current_user
         )
 
         with Session() as session:
@@ -42,12 +38,12 @@ class MitarbeiterService:
                 mitarbeiter := self.repo.find_by_id(
                     mitarbeiter_id=mitarbeiter_id,
                     session=session,
-                    )
+                )
             ) is None:
                 if user_is_admin:
-                    message: Final = f"Kein Mitarbeiter mit der ID  {
-                        mitarbeiter_id
-                        } gefunden"
+                    message: Final = (
+                        f"Kein Mitarbeiter mit der ID  {mitarbeiter_id} gefunden"
+                    )
                     logger.debug("NotFoundError: {}", message)
                     raise NotFoundError(mitarbeiter_id=mitarbeiter_id)
                 logger.debug("Keine Berechtigung")

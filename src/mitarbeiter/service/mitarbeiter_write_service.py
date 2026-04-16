@@ -71,8 +71,8 @@ class MitarbeiterWriteService:
                 raise EmailExistsError(email=email)
 
             mitarbeiter_db: Final = self.repo.create(
-            mitarbeiter=mitarbeiter,
-            session=session)
+                mitarbeiter=mitarbeiter, session=session
+            )
             mitarbeiter_dto: Final = MitarbeiterDTO(mitarbeiter_db)
             session.commit()
 
@@ -83,10 +83,8 @@ class MitarbeiterWriteService:
         return mitarbeiter_dto
 
     def update(
-        self,
-        mitarbeiter: Mitarbeiter,
-        mitarbeiter_id: int,
-        version: int) -> MitarbeiterDTO:
+        self, mitarbeiter: Mitarbeiter, mitarbeiter_id: int, version: int
+    ) -> MitarbeiterDTO:
         """Daten eines Mitarbeiters ändern.
 
         :param mitarbeiter: Neuen Daten
@@ -99,7 +97,8 @@ class MitarbeiterWriteService:
         :raises EmailExistsError: Emailadresse existiert bereits
         """
         logger.debug(
-            "mitarbeiter_id={},version={}, {}", mitarbeiter_id, version, mitarbeiter)
+            "mitarbeiter_id={},version={}, {}", mitarbeiter_id, version, mitarbeiter
+        )
 
         with Session() as session:
             if (
@@ -122,8 +121,8 @@ class MitarbeiterWriteService:
             mitarbeiter_db.set(mitarbeiter)
             if (
                 mitarbeiter_updated := self.repo.update(
-                    mitarbeiter=mitarbeiter_db,
-                    session=session)
+                    mitarbeiter=mitarbeiter_db, session=session
+                )
             ) is None:
                 raise NotFoundError(mitarbeiter_id)
             mitarbeiter_dto: Final = MitarbeiterDTO(mitarbeiter_updated)

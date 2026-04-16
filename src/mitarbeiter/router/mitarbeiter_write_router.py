@@ -38,7 +38,8 @@ def post(
     """
     logger.debug("mitarbeiter_model={}", mitarbeiter_model)
     mitarbeiter_dto: Final = service.create(
-        mitarbeiter=mitarbeiter_model.to_mitarbeiter())
+        mitarbeiter=mitarbeiter_model.to_mitarbeiter()
+    )
     logger.debug("mitarbeiter_dto={}", mitarbeiter_dto)
 
     return Response(

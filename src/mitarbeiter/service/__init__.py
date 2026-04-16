@@ -1,4 +1,5 @@
 """Modul für die Geschäftslogik."""
+
 from mitarbeiter.service.auftrag_dto import AuftragDTO
 from mitarbeiter.service.exceptions import (
     EmailExistsError,

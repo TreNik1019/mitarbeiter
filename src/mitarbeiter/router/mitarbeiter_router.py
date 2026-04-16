@@ -37,8 +37,7 @@ def get_by_id(
     logger.debug("mitarbeiter_id={}, user={}", mitarbeiter_id, user)
 
     mitarbeiter: Final = service.find_by_id(
-        mitarbeiter_id=mitarbeiter_id,
-        current_user=user
+        mitarbeiter_id=mitarbeiter_id, current_user=user
     )
     logger.debug("{}", mitarbeiter)
 
@@ -88,8 +87,7 @@ def get(
         del suchparameter["size"]
 
     mitarbeiter_slice: Final = service.find(
-        suchparameter=suchparameter,
-        pageable=pageable
+        suchparameter=suchparameter, pageable=pageable
     )
 
     result: Final = _mitarbeiter_slice_to_page(mitarbeiter_slice, pageable)
@@ -130,5 +128,15 @@ def _mitarbeiter_to_dict(mitarbeiter: MitarbeiterDTO) -> dict[str, Any]:
     # https://docs.python.org/3/library/dataclasses.html
     mitarbeiter_dict: Final = asdict(obj=mitarbeiter)
     mitarbeiter_dict.pop("version")
-    mitarbeiter_dict.update({"eintrittsdatum": mitarbeiter.eintrittsdatum.isoformat()})
+
+    mitarbeiter_dict["eintrittsdatum"] = mitarbeiter.eintrittsdatum.isoformat()
+    mitarbeiter_dict["gehalt"] = float(mitarbeiter.gehalt)
+
+    if mitarbeiter.werksausweis:
+        mitarbeiter_dict["werksausweis"]["ausstellungsdatum"] = (
+            mitarbeiter.werksausweis.ausstellungsdatum.isoformat()
+        )
+        mitarbeiter_dict["werksausweis"]["guthaben"] = float(
+            mitarbeiter.werksausweis.guthaben
+        )
     return mitarbeiter_dict

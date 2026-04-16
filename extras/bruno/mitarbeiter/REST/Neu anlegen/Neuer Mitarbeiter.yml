@@ -1,0 +1,57 @@
+info:
+  name: Neuer Mitarbeiter
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{restUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+          "nachname": "Mustermann",
+          "email": "testrest@rest.de",
+          "position": "TE",
+          "gehalt": 5000.0,
+          "eintrittsdatum": "2026-02-01",
+          "homepage": "https://rest.de",
+          "geschlecht": "W",
+          "werksausweis": {
+              "status": "G",
+              "ausstellungsdatum": "2026-02-01",
+              "guthaben": 15.0
+          },
+          "auftraege": [
+              {
+                  "bezeichnung": "Restprojekt",
+                  "auftragserteilung": "2026-02-01",
+                  "dauer": "2026-02-28"
+              }
+          ],
+          "username": "testrest"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "201"
+    - expression: res.headers.location
+      operator: matches
+      value: \/rest\/[1-9]\d*$
+    - expression: res.body
+      operator: isString
+    - expression: res.body
+      operator: isEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

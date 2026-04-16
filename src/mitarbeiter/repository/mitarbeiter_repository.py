@@ -217,8 +217,8 @@ class MitarbeiterRepository:
             )
         ) is None:
             return
-            session.delete(instance=mitarbeiter)
-            logger.debug("Mitarbeiter mit ID {} gelöscht", mitarbeiter_id)
+        session.delete(instance=mitarbeiter)
+        logger.debug("Mitarbeiter mit ID {} gelöscht", mitarbeiter_id)
 
     def exists_username(self, username: str | None, session: Session) -> bool:
         """Abfrage, ob es den Benutzernamen bereits gibt."""

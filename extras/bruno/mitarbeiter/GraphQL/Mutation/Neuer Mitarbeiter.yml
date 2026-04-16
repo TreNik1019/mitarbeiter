@@ -1,0 +1,61 @@
+info:
+  name: Neuer Mitarbeiter
+  type: graphql
+  seq: 1
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    query: |-
+      mutation {
+        create(
+          mitarbeiterInput: {
+            nachname: "Testobj"
+            email: "test@firma.de"
+            position: ENTWICKLER
+            gehalt: "4500.00"
+            eintrittsdatum: "2020-02-20"
+            homepage: "https://test.firma.de"
+            geschlecht: WEIBLICH
+            werksausweis: {
+             status: AKTIV
+             guthaben: 36.0
+             ausstellungsdatum: "2023-04-24"
+            }
+            auftraege: [{
+              bezeichnung: "Testauftrag"
+              auftragserteilung: "2025-01-01"
+              dauer: "2025-12-31"
+            }]
+            username: "testgql123"
+          }
+       ) {
+         id
+        }
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: eq
+      value: application/json
+    - expression: res.body.data
+      operator: isJson
+    - expression: res.body.data.create.id
+      operator: gte
+      value: "0"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

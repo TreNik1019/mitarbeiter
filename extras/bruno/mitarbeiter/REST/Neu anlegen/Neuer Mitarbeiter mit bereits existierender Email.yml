@@ -1,0 +1,55 @@
+info:
+  name: Neuer Mitarbeiter mit bereits existierender Email
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{restUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+          "nachname": "Mustermannx",
+          "email": "mueller@firma.de",
+          "position": "TE",
+          "gehalt": 5000.0,
+          "eintrittsdatum": "2026-02-01",
+          "homepage": "https://rest.de",
+          "geschlecht": "W",
+          "werksausweis": {
+              "status": "G",
+              "ausstellungsdatum": "2026-02-01",
+              "guthaben": 15.0
+          },
+          "auftraege": [
+              {
+                  "bezeichnung": "Restprojekt",
+                  "auftragserteilung": "2026-02-01",
+                  "dauer": "2026-02-28"
+              }
+          ],
+          "username": "testrestx",
+      }
+  auth:
+    type: bearer
+    token: "{{TOKEN}}"
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "422"
+    - expression: res.body.detail
+      operator: contains
+      value: Email
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -23,8 +23,8 @@ import subprocess  # noqa: S404
 from pathlib import Path
 from sysconfig import get_platform
 
-nvd_api_key = "47fbc0a4-9240-4fda-9a26-d7d5624c16bf"
-project = "FastAPI"
+nvd_api_key = "f5c12fb5-a059-4741-bbdf-b5fe7fe8eb1a"
+project = "mitarbeiter"
 
 base_script = "dependency-check"
 betriebssystem = get_platform()
@@ -40,7 +40,7 @@ else:
 script = base_exec_path / "dependency-check" / "bin" / base_script
 print(f"script={script}")
 
-data_path = base_data_path / "dependency-check-data"
+data_path = base_data_path / "dependency-check/data"
 pyproject_path = Path("..")
 report_path = "."
 

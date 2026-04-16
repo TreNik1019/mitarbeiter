@@ -22,7 +22,7 @@ def test_put() -> None:
     geaenderter_mitarbeiter: Final = {
         "nachname": "Müllerput",
         "email": EMAIL_UPDATE,
-        "position": "ENTWICKLER",
+        "position": "EN",
         "gehalt": 6000,
         "eintrittsdatum": "2025-01-02",
         "homepage": HOMEPAGE_UPDATE,
@@ -55,7 +55,7 @@ def test_put_invalid() -> None:
     geaenderter_mitarbeiter_invalid: Final = {
         "nachname": "falscher_nachname_put",
         "email": "falsche_email_put@",
-        "position": "ENTWICKLER",
+        "position": "ENGLISH",
         "gehalt": 6000,
         "eintrittsdatum": "2025-01-02",
         "homepage": "https://?!",
@@ -92,7 +92,7 @@ def test_put_nicht_vorhanden() -> None:
     geaenderter_mitarbeiter: Final = {
         "nachname": "Müllerput",
         "email": EMAIL_UPDATE,
-        "position": "ENTWICKLER",
+        "position": "EN",
         "gehalt": 6000,
         "eintrittsdatum": "2025-01-02",
         "homepage": HOMEPAGE_UPDATE,
@@ -126,7 +126,7 @@ def test_put_email_exists() -> None:
     geaenderter_mitarbeiter: Final = {
         "nachname": "Müllerput",
         "email": email_exists,
-        "position": "ENTWICKLER",
+        "position": "EN",
         "gehalt": 6000,
         "eintrittsdatum": "2025-01-02",
         "homepage": HOMEPAGE_UPDATE,
@@ -159,7 +159,7 @@ def test_put_ohne_versionsnr() -> None:
     geaenderter_mitarbeiter: Final = {
         "nachname": "Müllerput",
         "email": EMAIL_UPDATE,
-        "position": "ENTWICKLER",
+        "position": "EN",
         "gehalt": 6000,
         "eintrittsdatum": "2025-01-02",
         "homepage": HOMEPAGE_UPDATE,
@@ -191,7 +191,7 @@ def test_put_alte_versionsnr() -> None:
     geaenderter_mitarbeiter: Final = {
         "nachname": "Müllerput",
         "email": EMAIL_UPDATE,
-        "position": "ENTWICKLER",
+        "position": "EN",
         "gehalt": 6000,
         "eintrittsdatum": "2025-01-02",
         "homepage": HOMEPAGE_UPDATE,
@@ -224,7 +224,7 @@ def test_put_ungueltige_versionsnr() -> None:
     geaenderter_mitarbeiter: Final = {
         "nachname": "Müllerput",
         "email": EMAIL_UPDATE,
-        "position": "ENTWICKLER",
+        "position": "EN",
         "gehalt": 6000,
         "eintrittsdatum": "2025-01-02",
         "homepage": HOMEPAGE_UPDATE,
@@ -258,7 +258,7 @@ def test_put_versionsnr_ohne_quotes() -> None:
     geaenderter_mitarbeiter: Final = {
         "nachname": "Müllerput",
         "email": EMAIL_UPDATE,
-        "position": "ENTWICKLER",
+        "position": "EN",
         "gehalt": 6000,
         "eintrittsdatum": "2025-01-02",
         "homepage": HOMEPAGE_UPDATE,

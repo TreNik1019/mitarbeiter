@@ -108,7 +108,7 @@ class Mitarbeiter(Base):
     def set(self, mitarbeiter: Self) -> None:
         """Primitive Attributwerte überschreiben, z.B. vor DB-Update.
 
-        :param patient: Mitarbeiter-Objekt mit den aktuellen Daten
+        :param mitarbeiter: Mitarbeiter-Objekt mit den aktuellen Daten
         """
         self.nachname = mitarbeiter.nachname
         self.email = mitarbeiter.email

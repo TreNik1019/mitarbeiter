@@ -146,7 +146,7 @@ def favicon() -> FileResponse:
     """facicon.ico ermitteln."""
     src_path: Final = Path("src")
     file_name: Final = "favicon.ico"
-    favicon_path: Final = Path("patient") / "static" / file_name
+    favicon_path: Final = Path("mitarbeiter") / "static" / file_name
     file_path: Final = src_path / favicon_path if src_path.is_dir() else favicon_path
     logger.debug("file_path={}", file_path)
     return FileResponse(

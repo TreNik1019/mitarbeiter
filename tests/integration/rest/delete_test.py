@@ -13,7 +13,7 @@ from pytest import mark
 @mark.delete_request
 def test_delete() -> None:
     # arrange - vorbereiten
-    mitarbeiter_id: Final = 60
+    mitarbeiter_id: Final = 50
     token: Final = login()
     assert token is not None
     headers: Final = {"Authorization": f"Bearer {token}"}
